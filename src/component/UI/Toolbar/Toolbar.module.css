@@ -1,0 +1,8 @@
+.Toolbar {
+    margin: 0;
+    height: 100%;
+    list-style: none;
+    display: flex;
+    background-color: darkslategray;
+    box-sizing: border-box;
+}

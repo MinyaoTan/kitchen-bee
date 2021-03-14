@@ -7,6 +7,8 @@ class RecipeList extends Component {
         return (
             <div>
                 <RecipeCard />
+                <RecipeCard />
+                <RecipeCard />
             </div>
         );
     }
