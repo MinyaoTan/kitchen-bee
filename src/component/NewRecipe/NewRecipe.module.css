@@ -1,0 +1,10 @@
+.NewRecipe {
+    margin: 30px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 2px #ccc;
+}
+
+.NewRecipe input {
+    margin: 20px;
+    display: block;
+}

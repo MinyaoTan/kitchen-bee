@@ -5,7 +5,7 @@ import classes from './Toolbar.module.css';
 
 const toolbar = () => (
     <ul className={classes.Toolbar}>
-        <NavItem link="/">Recipes</NavItem>
+        <NavItem link="/" exact>Recipes</NavItem>
         <NavItem link="/newRecipe">New Recipe</NavItem>
     </ul>
 );
