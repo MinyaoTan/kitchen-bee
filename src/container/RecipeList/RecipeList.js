@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-import Recipe from '../../component/Recipe/Recipe';
+import RecipeCard from '../../component/RecipeCard/RecipeCard';
 
 class RecipeList extends Component {
     render() {
         return (
             <div>
-                <Recipe />
+                <RecipeCard />
             </div>
         );
     }
