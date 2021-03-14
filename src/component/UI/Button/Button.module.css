@@ -1,0 +1,36 @@
+.Button {
+    margin: auto;
+    margin: 5px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.Button:focus {
+    outline: none;
+}
+
+.Success {
+    color: green;
+    border: 1px solid green;
+}
+
+.Success:hover,
+.Success:active {
+    color: white;
+    background-color: green;
+}
+
+.Danger {
+    color: red;
+    border: 1px solid red;
+}
+
+.Danger:hover,
+.Danger:active {
+    color: white;
+    background-color: red;
+}
+
+.Button:disabled {
+    cursor: not-allowed;
+}
