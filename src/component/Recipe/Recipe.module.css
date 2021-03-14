@@ -1,0 +1,8 @@
+.Recipe {
+    border: 1px solid #ccc;
+    box-shadow: 1px 2px #ccc;
+    width: 80%;
+    margin: auto;
+    padding: 5px;
+    box-sizing: border-box;
+}
