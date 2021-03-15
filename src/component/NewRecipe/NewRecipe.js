@@ -17,6 +17,15 @@ class NewRecipe extends Component {
         }       
     };
 
+    componentDidMount() {
+        if (this.props.match.url.includes('editRecipe')) {
+            axios.get('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes/' + this.props.match.params.id + '.json')
+            .then(response => {
+                this.setState({data: response.data, currentStep: response.data.steps.length});
+            });
+        }
+    }
+
     onSaveHandler = (id, desc) => {
         const newData = Object.assign({}, this.state.data);
         this.setState((prevState) => {
@@ -74,10 +83,19 @@ class NewRecipe extends Component {
     }
 
     saveRecipeHandler = () => {
-        axios.post('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes.json', this.state.data)
+        if (this.props.match.url.includes('editRecipe')) {
+            axios.put('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes/' + this.props.match.params.id + '.json', {
+                ...this.state.data
+            })
             .then(response => {
                 this.props.history.push('/');
             });
+        } else {
+            axios.post('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes.json', this.state.data)
+            .then(response => {
+                this.props.history.push('/');
+            });
+        }
     }
 
     render() {
@@ -86,12 +104,13 @@ class NewRecipe extends Component {
         ));
         return (
             <div className={classes.NewRecipe}>
-                <input type="text" placeholder="Recipe Title" onChange={(event) => this.titleChangedHandler(event)} />
-                <input type="text" placeholder="Recipe Author" onChange={(event) => this.authorChangedHandler(event)} />
+                <input type="text" placeholder="Recipe Title" onChange={(event) => this.titleChangedHandler(event)} value={this.state.data.title} />
+                <input type="text" placeholder="Recipe Author" onChange={(event) => this.authorChangedHandler(event)} value={this.state.data.author} />
                 <textarea type="text" 
                     placeholder="List ingredients here..." 
                     rows="5"
-                    onChange={(event) => this.ingredientsChangedHandler(event)} />
+                    onChange={(event) => this.ingredientsChangedHandler(event)}
+                    value={this.state.data.ingredients} />
                 {steps}
                 <NewStep id={this.state.currentStep} onSave={this.onSaveHandler} />
                 <Button btnType="Success" onClick={this.saveRecipeHandler}>Save Recipe</Button>

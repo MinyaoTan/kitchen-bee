@@ -12,6 +12,7 @@ class Book extends Component {
             <div>
                 <Toolbar />
                 <Switch>
+                <Route path="/editRecipe:id" component={NewRecipe} />
                     <Route path="/recipe:id" component={Recipe} />
                     <Route path="/newRecipe" component={NewRecipe} />
                     <Route path="/" component={RecipeList} />

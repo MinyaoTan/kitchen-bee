@@ -15,7 +15,6 @@ class Recipe extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.match.params.id)
         axios.get('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes/' + this.props.match.params.id + '.json')
             .then(response => {
                 this.setState({data: response.data});

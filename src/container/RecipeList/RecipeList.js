@@ -96,6 +96,10 @@ class RecipeList extends Component {
             })
     }
 
+    recipeEditHandler = (id) => {
+        this.props.history.push('/editRecipe' + id);
+    }
+
     render() {
         const recipes = this.state.recipes.map(recipe => (
             <RecipeCard 
@@ -103,7 +107,8 @@ class RecipeList extends Component {
                 id={recipe[0]}
                 title={recipe[1].title} 
                 author={recipe[1].author}
-                onClick={this.recipeClickedHandler} />
+                onClick={this.recipeClickedHandler}
+                edit={this.recipeEditHandler} />
         ));
         return (
             <div>

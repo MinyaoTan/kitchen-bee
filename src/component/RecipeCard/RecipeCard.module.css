@@ -12,3 +12,8 @@
 .RecipeCard h3 {
     cursor: pointer;
 }
+
+.RecipeCard Button {
+    margin-left: 90%;
+    float: right;
+}
