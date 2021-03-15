@@ -4,6 +4,11 @@
     width: 80%;
     margin: auto;
     margin-top: 50px;
+    margin-bottom: 50px;
     padding: 5px;
     box-sizing: border-box;
+}
+
+.RecipeCard h3 {
+    cursor: pointer;
 }

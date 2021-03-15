@@ -8,7 +8,8 @@ const step = (props) => (
         <hr />
         <h3>Step {props.id}</h3>
         <p>{props.desc}</p>
-        <Button btnType="Danger" onClick={() => props.delete(props.id)}>Delete</Button>
+        {props.delete ? <Button btnType="Danger" onClick={() => props.delete(props.id)}>Delete</Button>
+        : null}
     </div>
 );
 
