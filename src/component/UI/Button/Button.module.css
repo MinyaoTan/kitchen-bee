@@ -3,6 +3,7 @@
     margin: 5px;
     background: transparent;
     cursor: pointer;
+    padding: 10px;
 }
 
 .Button:focus {

@@ -1,43 +1,100 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import classes from './NewRecipe.module.css';
 import Step from '../Step/Step';
 import NewStep from '../NewStep/NewStep';
+import Button from '../UI/Button/Button';
 
 class NewRecipe extends Component {
     state = {
         currentStep: 0,
-        steps: []
+        data: {
+            steps: [],
+            title: '',
+            author: '',
+            ingredients: ''
+        }       
     };
 
     onSaveHandler = (id, desc) => {
+        const newData = Object.assign({}, this.state.data);
         this.setState((prevState) => {
             return {
                 currentStep: prevState.currentStep + 1,
-                steps: prevState.steps.concat({id: id, description: desc})
+                data: {
+                    ...newData,
+                    steps: prevState.data.steps.concat(desc)
+                }
             };
         });
     }
 
     stepDeleteHandler = (id) => {
+        const newData = Object.assign({}, this.state.data);
         this.setState((prevState) => {
             return {
                 currentStep: prevState.currentStep - 1,
-                steps: prevState.steps.filter((step, index) => index !== id)
+                data: {
+                    ...newData,
+                    steps: prevState.data.steps.filter((step, index) => index !== id)
+                }    
             };
         });
     }
 
+    titleChangedHandler = (event) => {
+        const newData = Object.assign({}, this.state.data);
+        this.setState({
+            data: {
+                ...newData,
+                title: event.target.value
+            }           
+        });
+    }
+
+    authorChangedHandler = (event) => {
+        const newData = Object.assign({}, this.state.data);
+        this.setState({
+            data: {
+                ...newData,
+                author: event.target.value
+            }           
+        });
+    }
+
+    ingredientsChangedHandler = (event) => {
+        const newData = Object.assign({}, this.state.data);
+        this.setState({
+            data: {
+                ...newData,
+                ingredients: event.target.value
+            }           
+        });
+    }
+
+    saveRecipeHandler = () => {
+        axios.post('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes.json', this.state.data)
+            .then(response => {
+                this.props.history.push('/');
+            });
+    }
+
     render() {
-        const steps = this.state.steps.map((step, index) => (
-            <Step key={index} id={index} desc={step.description} delete={this.stepDeleteHandler} />
+        const steps = this.state.data.steps.map((step, index) => (
+            <Step key={index} id={index} desc={step} delete={this.stepDeleteHandler} />
         ));
         return (
             <div className={classes.NewRecipe}>
-                <input type="text" placeholder="Recipe Title" />
-                <input type="text" placeholder="Recipe Author" />
+                <input type="text" placeholder="Recipe Title" onChange={(event) => this.titleChangedHandler(event)} />
+                <input type="text" placeholder="Recipe Author" onChange={(event) => this.authorChangedHandler(event)} />
+                <textarea type="text" 
+                    placeholder="List ingredients here..." 
+                    rows="5"
+                    onChange={(event) => this.ingredientsChangedHandler(event)} />
                 {steps}
                 <NewStep id={this.state.currentStep} onSave={this.onSaveHandler} />
+                <Button btnType="Success" onClick={this.saveRecipeHandler}>Save Recipe</Button>
             </div>
         );
     }

@@ -26,7 +26,7 @@ class newStep extends Component {
                     rows="5" 
                     onChange={(event) => this.textareaOnchangeHandler(event)} 
                     value={this.state.desc} />
-                <Button btnType="Success" onClick={this.onSaveHandler}>Save Step</Button>
+                <Button btnType="Success" onClick={this.onSaveHandler}>Add Step</Button>
             </div>
         );
     }

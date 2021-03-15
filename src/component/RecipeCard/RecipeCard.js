@@ -2,10 +2,10 @@ import React from 'react';
 
 import classes from './RecipeCard.module.css';
 
-const recipeCard = () => (
+const recipeCard = (props) => (
     <div className={classes.RecipeCard}>
-        <p>Title</p>
-        <p>Author, Date</p>
+        <h3>{props.title}</h3>
+        <p>{props.author}</p>
     </div>
 );
 

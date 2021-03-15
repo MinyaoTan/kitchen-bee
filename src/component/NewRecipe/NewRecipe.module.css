@@ -9,3 +9,7 @@
     margin: 20px;
     display: block;
 }
+
+.NewRecipe textarea {
+    width: 95%;
+}
