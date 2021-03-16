@@ -7,7 +7,7 @@ const recipeCard = (props) => (
     <div className={classes.RecipeCard}>
         <Button btnType="Success" onClick={() => props.edit(props.id)}>Edit</Button>
         <h3 onClick={() => props.onClick(props.id)}>{props.title}</h3>
-        <p>{props.author}</p>
+        <p>By {props.author}</p>
     </div>
 );
 

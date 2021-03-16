@@ -52,6 +52,14 @@ class SearchResult extends Component {
         }
     }
 
+    recipeClickedHandler = (id) => {
+        this.props.history.push('/recipe' + id);
+    }
+
+    recipeEditHandler = (id) => {
+        this.props.history.push('/editRecipe' + id);
+    }
+
     render() {
         const recipes = this.props.recipes.map(recipe => (
             <RecipeCard 
