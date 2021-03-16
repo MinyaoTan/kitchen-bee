@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Button from '../UI/Button/Button';
+import * as actionType from '../../store/actionType';
 
 class Search extends Component {
     state = {
@@ -9,10 +11,11 @@ class Search extends Component {
     }
 
     searchTargetChangedHandler = (event) => {
-        this.setState({search: event.target.value});
+        this.setState({target: event.target.value});
     }
 
     searchClickedHandler = () => {
+        this.props.onSearchTargetChange(this.state.target);
         this.props.history.push('/searchResult');
     }
 
@@ -26,4 +29,16 @@ class Search extends Component {
     }
 }
 
-export default withRouter(Search);
+const mapStateToProps = state => {
+    return {
+        target: state.searchTarget
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSearchTargetChange: (target) => dispatch({type: actionType.CHANGE_SEARCH_TARGET, target: target})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Search));

@@ -5,6 +5,7 @@ import RecipeList from '../RecipeList/RecipeList';
 import Toolbar from '../../component/UI/Toolbar/Toolbar';
 import NewRecipe from '../../component/NewRecipe/NewRecipe';
 import Recipe from '../../component/Recipe/Recipe';
+import SearchResult from '../SearchResult/SearchResult';
 
 class Book extends Component {
     render() {
@@ -12,7 +13,8 @@ class Book extends Component {
             <div>
                 <Toolbar />
                 <Switch>
-                <Route path="/editRecipe:id" component={NewRecipe} />
+                    <Route path="/searchResult" component={SearchResult} />
+                    <Route path="/editRecipe:id" component={NewRecipe} />
                     <Route path="/recipe:id" component={Recipe} />
                     <Route path="/newRecipe" component={NewRecipe} />
                     <Route path="/" component={RecipeList} />

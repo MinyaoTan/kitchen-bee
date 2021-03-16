@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import RecipeCard from '../../component/RecipeCard/RecipeCard';
 import Button from '../../component/UI/Button/Button';
 import Search from '../../component/Search/Search';
+import * as actionType from '../../store/actionType';
 
-const pageItems = 5;
+const pageItems = 2;
 
 class RecipeList extends Component {
-    state = {
-        boundaries: [0, pageItems],
-        recipes: [],
-        page: 1,
-        disableNext: false
-    }
 
     componentDidMount() {
+        this.props.onResetState();
         this.getData();
     }
 
@@ -27,31 +23,19 @@ class RecipeList extends Component {
     nextClickedHandler = () => {
         axios.get('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes.json')
             .then(response => {
-                this.setState((prevState) => {
-                    return {
-                        boundaries: [prevState.boundaries[0] + pageItems, prevState.boundaries[1] + pageItems]
-                    }
-                })
-                const recipes = Object.entries(response.data).slice(this.state.boundaries[0], this.state.boundaries[1]);
+                this.props.onBoundariesChange(1);
+                const recipes = Object.entries(response.data).slice(this.props.boundaries[0], this.props.boundaries[1]);
                 if (recipes.length == pageItems) {
-                    this.setState({disableNext: false});
+                    this.props.onDisableNext(false);
                 } else {
-                    this.setState({disableNext: true});
+                    this.props.onDisableNext(true);
                 }
-                console.log(recipes.length);
+                
                 if (recipes.length > 0) {
-                    this.setState((prevState) => {
-                        return {
-                            recipes: recipes,
-                            page: prevState.page + 1
-                        }
-                    });
+                    this.props.onRecipesUpdate(recipes);
+                    this.props.onPageUpdate(1);
                 } else {
-                    this.setState((prevState) => {
-                        return {
-                            boundaries: [prevState.boundaries[0] - pageItems, prevState.boundaries[1] - pageItems]
-                        }
-                    })
+                    this.props.onBoundariesChange(0);
                 }
             })
     }
@@ -59,21 +43,13 @@ class RecipeList extends Component {
     previousClickedHandler = () => {
         axios.get('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes.json')
             .then(response => {
-                this.setState((prevState) => {
-                    return {
-                        disableNext: false,
-                        boundaries: [prevState.boundaries[0] - pageItems, prevState.boundaries[1] - pageItems]
-                    }
-                })
-                const recipes = Object.entries(response.data).slice(this.state.boundaries[0], this.state.boundaries[1]);
+                this.props.onBoundariesChange(0);
+                this.props.onDisableNext(false);
+                const recipes = Object.entries(response.data).slice(this.props.boundaries[0], this.props.boundaries[1]);
 
                 if (recipes.length > 0) {
-                    this.setState((prevState) => {
-                        return {
-                            recipes: recipes,
-                            page: prevState.page - 1
-                        }
-                    });
+                    this.props.onRecipesUpdate(recipes);
+                    this.props.onPageUpdate(-1);
                 }
             })
     }
@@ -81,19 +57,15 @@ class RecipeList extends Component {
     getData() {
         axios.get('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes.json')
             .then(response => {
-                const recipes = Object.entries(response.data).slice(this.state.boundaries[0], this.state.boundaries[1]);
-                if (recipes.length == pageItems) {
-                    this.setState({disableNext: false});
+                const recipes = Object.entries(response.data).slice(this.props.boundaries[0], this.props.boundaries[1]);
+                if (recipes.length === pageItems) {
+                    this.props.onDisableNext(false);
                 } else {
-                    this.setState({disableNext: true});
+                    this.props.onDisableNext(true);
                 }
 
                 if (recipes.length > 0) {
-                    this.setState((prevState) => {
-                        return {
-                            recipes: recipes
-                        }
-                    });
+                    this.props.onRecipesUpdate(recipes);
                 }
             })
     }
@@ -102,28 +74,8 @@ class RecipeList extends Component {
         this.props.history.push('/editRecipe' + id);
     }
 
-    // searchClickedHandler = () => {
-    //     axios.get('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes.json')
-    //         .then(response => {
-    //             const result = Object.entries(response.data).filter(recipe => recipe[1].title.includes(this.state.search));
-    //             this.setState({
-    //                 searchResult: result,
-    //                 boundaries: [0, pageItems],
-    //                 page: 1,
-    //                 disableNext: false
-    //             });
-    //             this.setState({
-    //                 recipes: result.slice(this.state.boundaries[0], this.state.boundaries[1])
-    //             });
-    //         });
-    // }
-
-    // searchTargetChangedHandler = (event) => {
-    //     this.setState({search: event.target.value});
-    // }
-
     render() {
-        const recipes = this.state.recipes.map(recipe => (
+        const recipes = this.props.recipes.map(recipe => (
             <RecipeCard 
                 key={recipe[0]} 
                 id={recipe[0]}
@@ -136,12 +88,31 @@ class RecipeList extends Component {
             <div>
                 <Search />
                 {recipes}
-                <p>Page {this.state.page}</p>
-                <Button btnType="Success" onClick={this.previousClickedHandler} disabled={this.state.page === 1}>Previous</Button>
-                <Button btnType="Success" onClick={this.nextClickedHandler} disabled={this.state.disableNext}>Next</Button>
+                <p>Page {this.props.page}</p>
+                <Button btnType="Success" onClick={this.previousClickedHandler} disabled={this.props.page === 1}>Previous</Button>
+                <Button btnType="Success" onClick={this.nextClickedHandler} disabled={this.props.disableNext}>Next</Button>
             </div>
         );
     }
 }
 
-export default RecipeList;
+const mapStateToProps = state => {
+    return {
+        boundaries: state.boundaries,
+        recipes: state.recipes,
+        page: state.page,
+        disableNext: state.disableNext
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onBoundariesChange: (value) => dispatch({type: actionType.CHANGE_BOUNDARIES, value: value}),
+        onRecipesUpdate: (recipes) => dispatch({type: actionType.UPDATE_RECIPES, recipes: recipes}),
+        onPageUpdate: (value) => dispatch({type: actionType.UPDATE_PAGE, value: value}),
+        onDisableNext: (disable) => dispatch({type: actionType.DISABLE_NEXT, disable: disable}),
+        onResetState: () => dispatch({type: actionType.RESET_STATE})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeList);
