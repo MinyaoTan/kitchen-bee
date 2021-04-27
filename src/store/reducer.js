@@ -1,13 +1,14 @@
 import * as actionType from '../store/actionType';
 
-const pageItems = 2;
+const pageItems = 5;
 const initialState = {
     searchResult: [],
     searchTarget: '',
     boundaries: [0, pageItems],
     recipes: [],
     page: 1,
-    disableNext: false
+    disableNext: false,
+    images: []
 }
 
 
@@ -51,7 +52,7 @@ const reducer = (state = initialState, action) => {
         case actionType.RESET_STATE:
             return {
                 ...initialState
-            };
+            }
         default:
             return state;
     }

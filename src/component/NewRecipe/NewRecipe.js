@@ -26,6 +26,10 @@ class NewRecipe extends Component {
         }
     }
 
+    // componentDidUpdate() {
+    //     console.log(this.state.data);
+    // }
+
     onSaveHandler = (id, desc) => {
         const newData = Object.assign({}, this.state.data);
         this.setState((prevState) => {

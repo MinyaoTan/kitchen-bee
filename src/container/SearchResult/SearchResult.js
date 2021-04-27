@@ -7,22 +7,33 @@ import Button from '../../component/UI/Button/Button';
 import * as actionType from '../../store/actionType';
 import RecipeCard from '../../component/RecipeCard/RecipeCard';
 
-const pageItems = 2;
+const pageItems = 5;
 
 class SearchResult extends Component {
     componentDidMount() {
+        // if user refreshes
         if (this.props.target === '') {
             this.props.history.push('/');
         } else {
-            axios.get('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes.json')
-                .then(response => {
-                    const result = Object.entries(response.data)
-                        .filter(recipe => recipe[1].title.includes(this.props.target));
-                    this.props.onPopulateResult(result);
-                    const recipes = result.slice(this.props.boundaries[0], this.props.boundaries[1]);
-                    this.props.onRecipesUpdate(recipes);
-                });
+            this.getData();
         }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.target !== prevProps.target) {
+            this.getData();
+        }
+    }
+
+    getData() {
+        axios.get('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes.json')
+            .then(response => {
+                const result = Object.entries(response.data)
+                    .filter(recipe => recipe[1].title.includes(this.props.target));
+                this.props.onPopulateResult(result);
+                const recipes = result.slice(this.props.boundaries[0], this.props.boundaries[1]);
+                this.props.onRecipesUpdate(recipes);
+            });
     }
 
     nextClickedHandler = () => {

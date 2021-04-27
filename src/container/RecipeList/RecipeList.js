@@ -7,7 +7,7 @@ import Button from '../../component/UI/Button/Button';
 import Search from '../../component/Search/Search';
 import * as actionType from '../../store/actionType';
 
-const pageItems = 2;
+const pageItems = 5;
 
 class RecipeList extends Component {
 
@@ -57,6 +57,7 @@ class RecipeList extends Component {
     getData() {
         axios.get('https://kitchen-bee-6359c-default-rtdb.firebaseio.com/recipes.json')
             .then(response => {
+                console.log(Object.entries(response.data));
                 const recipes = Object.entries(response.data).slice(this.props.boundaries[0], this.props.boundaries[1]);
                 if (recipes.length === pageItems) {
                     this.props.onDisableNext(false);
@@ -81,6 +82,7 @@ class RecipeList extends Component {
                 id={recipe[0]}
                 title={recipe[1].title} 
                 author={recipe[1].author}
+                img={recipe[1].img}
                 onClick={this.recipeClickedHandler}
                 edit={this.recipeEditHandler} />
         ));
